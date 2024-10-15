@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Film, AppError } from "./api/schema"
+import { Movie, Company, Film, AppError } from "./api/schema"
 import { getMovies, getCompanies } from './api/api'
 
 import Table from '@mui/material/Table'
@@ -17,12 +17,12 @@ import ModalBox from './components/ModalBox'
 
 const avg = (numbers: number[]) => (numbers.reduce((acc, i) => acc + i) / numbers.length).toFixed(1)
 
-const mergeDataArrays = (movies: any, companies: any) => {
-  return movies.map((film: any) => {
-    const company = companies.find((company: any) => company.id === film.filmCompanyId)
+const mergeDataArrays = (movies: Movie[], companies: Company[]) => {
+  return movies.map((film) => {
+    const company = companies.find((company: Company) => company.id === film.filmCompanyId)
     return {
       ...film,
-      companyName: company ? company.name : null
+      companyName: company ? company.name : 'Unknown'
     };
   });
 };

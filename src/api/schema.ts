@@ -30,5 +30,6 @@ export interface Film {
     review: string
     title: string
     filmCompany?: string
+    filmCompanyId: string
     companyName: string
 }
