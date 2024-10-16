@@ -18,14 +18,16 @@ import ModalBox from './components/ModalBox'
 const avg = (numbers: number[]) => (numbers.reduce((acc, i) => acc + i) / numbers.length).toFixed(1)
 
 const mergeDataArrays = (movies: Movie[], companies: CompanyInstance[]) => {
-  return movies.map((film) => {
-    const company = companies.find((company: CompanyInstance) => company.id === film.filmCompanyId)
+  const companyMap = new Map(companies.map(company => [company.id, company.name]))
+
+  return movies.map(film => {
+    const companyName = companyMap.get(film.filmCompanyId) || 'Unknown';
     return {
       ...film,
-      companyName: company ? company.name : 'Unknown'
-    };
+      companyName
+    }
   });
-};
+}
 
 export const App = () => {
 
