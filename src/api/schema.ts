@@ -7,6 +7,11 @@ export interface MovieInstance {
     releaseYear: number
 }
 
+export interface CompanyInstance {
+    id: string
+    name: string
+}
+
 export enum AppError {
     NO,
     MovieFetchError,
@@ -16,20 +21,7 @@ export interface Movie {
     id: string
     review: string
     title: string
-    filmCompany?: string
+    companyName?: string
     filmCompanyId: string
 }
 
-export interface Company {
-    id: string
-    name: string
-}
-
-export interface Film {
-    id: string
-    review: string
-    title: string
-    filmCompany?: string
-    filmCompanyId: string
-    companyName: string
-}

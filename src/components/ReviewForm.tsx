@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { Film } from '../api/schema'
+import { Movie } from '../api/schema'
 import { Alert, Button } from '@mui/material'
 
-export default function ReviewForm(props: { selectedMovie: Film }) {
+export default function ReviewForm(props: { selectedMovie: Movie }) {
 
   const [message, setMessage] = useState("Form is not submitted")
   const [reviewInputTextLength, setReviewInputTextLength] = useState(0)

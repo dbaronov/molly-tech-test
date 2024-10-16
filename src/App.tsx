@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Movie, Company, Film, AppError } from "./api/schema"
+import { Movie, CompanyInstance, Film, AppError } from "./api/schema"
 import { getMovies, getCompanies } from './api/api'
 
 import Table from '@mui/material/Table'
@@ -17,9 +17,9 @@ import ModalBox from './components/ModalBox'
 
 const avg = (numbers: number[]) => (numbers.reduce((acc, i) => acc + i) / numbers.length).toFixed(1)
 
-const mergeDataArrays = (movies: Movie[], companies: Company[]) => {
+const mergeDataArrays = (movies: Movie[], companies: CompanyInstance[]) => {
   return movies.map((film) => {
-    const company = companies.find((company: Company) => company.id === film.filmCompanyId)
+    const company = companies.find((company: CompanyInstance) => company.id === film.filmCompanyId)
     return {
       ...film,
       companyName: company ? company.name : 'Unknown'
@@ -29,10 +29,10 @@ const mergeDataArrays = (movies: Movie[], companies: Company[]) => {
 
 export const App = () => {
 
-  const [selectedMovie, setSelectedMovie] = useState(Object)
+  const [selectedMovie, setSelectedMovie] = useState<Film | null>(null)
   const [selectedRow, setSelectedRow] = useState(0)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [films, setFilms] = useState<Film[]>([])
+  const [movies, setMovies] = useState<Movie[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<AppError>(AppError.NO)
 
@@ -56,7 +56,7 @@ export const App = () => {
 
         // Merging movies and companies after both are fetched
         const mergedData = mergeDataArrays(processedMovies, processedCompanies)
-        setFilms(mergedData)
+        setMovies(mergedData)
 
         setIsLoading(false)
         setError(AppError.NO)
@@ -77,14 +77,14 @@ export const App = () => {
 
   return (
     <div className="App" style={{ padding: "15px" }}>
-      <Typography variant="h4" component="h1" style={{ textAlign: "center", margin: "20px 0" }}>Welcome to Movie database!</Typography>
+      <Typography variant="h4" component="h1" sx={{ textAlign: "center", margin: "20px 0" }}>Welcome to Movie database!</Typography>
 
       {isLoading && <LinearProgress />}
 
       {error === AppError.MovieFetchError &&
-        <Alert severity='error' style={{ display: "flex", alignItems: "center" }}>
+        <Alert severity='error' sx={{ display: "flex", alignItems: "center" }}>
           <span>Problem to fetch data</span>
-          <Button onClick={() => getAllData()} variant="contained" size="small" style={{ marginLeft: "15px" }}>Retry</Button>
+          <Button onClick={() => getAllData()} variant="contained" size="small" sx={{ marginLeft: "15px" }}>Retry</Button>
         </Alert>
       }
 
@@ -94,20 +94,20 @@ export const App = () => {
           <Table sx={{ minWidth: 320 }} size="small" aria-label="Movie ratings table">
             <TableBody>
               <TableRow>
-                <TableCell style={{ width: '25%', fontWeight: 'bold' }}>Title</TableCell>
-                <TableCell style={{ width: '25%', fontWeight: 'bold' }}>Rating</TableCell>
-                <TableCell style={{ width: '25%', fontWeight: 'bold' }}>Film Company</TableCell>
-                <TableCell style={{ width: '25%', fontWeight: 'bold' }}>Write review</TableCell>
+                <TableCell sx={{ width: '25%', fontWeight: 'bold' }}>Title</TableCell>
+                <TableCell sx={{ width: '25%', fontWeight: 'bold' }}>Rating</TableCell>
+                <TableCell sx={{ width: '25%', fontWeight: 'bold' }}>Film Company</TableCell>
+                <TableCell sx={{ width: '25%', fontWeight: 'bold' }}>Write review</TableCell>
               </TableRow>
-              {films.map((film, index) =>
+              {movies.map((movie, index) =>
                 <TableRow
-                  key={film.title}
+                  key={movie.title}
                   selected={selectedRow === index + 1}
-                  onClick={() => { handleSelectRow(index + 1); setSelectedMovie(film); }}
+                  onClick={() => { handleSelectRow(index + 1); setSelectedMovie(movie); }}
                 >
-                  <TableCell>{film.title}</TableCell>
-                  <TableCell>{film.review}</TableCell>
-                  <TableCell>{film.companyName || "Unknown"}</TableCell>
+                  <TableCell>{movie.title}</TableCell>
+                  <TableCell>{movie.review}</TableCell>
+                  <TableCell>{movie.companyName || "Unknown"}</TableCell>
                   <TableCell>
                     <ModalBox selectedMovie={selectedMovie} />
                   </TableCell>
@@ -118,7 +118,7 @@ export const App = () => {
               <TableRow>
                 <TableCell colSpan={3}></TableCell>
                 <TableCell>
-                  <Typography variant="subtitle2" component="p" style={{ textAlign: "left" }}>Total movies displayed: {films.length}</Typography>
+                  <Typography variant="subtitle2" component="p" sx={{ textAlign: "left" }}>Total movies displayed: {movies.length}</Typography>
                 </TableCell>
               </TableRow>
             </TableFooter>

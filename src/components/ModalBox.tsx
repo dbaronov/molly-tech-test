@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Film } from '../api/schema'
+import { Movie } from '../api/schema'
 import { Box, Button, Modal}  from '@mui/material'
 import ReviewForm from '../components/ReviewForm'
 
@@ -15,14 +15,14 @@ const style = {
   p: 4
 }
 
-export default function ModalBox(props: { selectedMovie: Film }) {
+export default function ModalBox(props: { selectedMovie: Movie | null }) {
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
   return (
     <div>
-      <Button size="small" variant="outlined" style={{ textTransform: "lowercase" }} onClick={handleOpen}>Write review</Button>
+      <Button size="small" variant="outlined" sx={{ textTransform: "lowercase" }} onClick={handleOpen}>Write review</Button>
       <Modal
         open={open}
         onClose={handleClose}
